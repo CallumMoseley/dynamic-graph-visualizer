@@ -84,4 +84,16 @@ public class Node {
 			connections.remove(node);
 		}
 	}
+
+	public boolean hasConnection(Node node) {
+		return connections.contains(node);
+	}
+	
+	public int numConnections() {
+		return connections.size();
+	}
+
+	public Node getConnection(int b) {
+		return connections.get(b);
+	}
 }

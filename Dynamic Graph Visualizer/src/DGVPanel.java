@@ -41,6 +41,41 @@ public class DGVPanel extends JPanel
 	
 	public void updateLoop() {
 		for (;;) {
+			
+			if ((int) (Math.random() * 3000) == 0) {
+				nodes.add(new Node(new Vector2D(Math.random() * 1024, Math.random() * 768)));
+			}
+			if ((int) (Math.random() * 2000) == 0) {
+				if (nodes.size() > 1) {
+					int a = (int) (Math.random() * nodes.size());
+					int b = (int) (Math.random() * nodes.size());
+					
+					if (a != b && !nodes.get(a).hasConnection(nodes.get(b))) {
+						nodes.get(a).addConnection(nodes.get(b));
+						nodes.get(b).addConnection(nodes.get(a));
+					}
+				}
+			}
+			if ((int) (Math.random() * 4000) == 0) {
+				if (nodes.size() > 1) {
+					int a = (int) (Math.random() * nodes.size());
+					if (nodes.get(a).numConnections() > 0) {
+						int b = (int) (Math.random() * nodes.get(a).numConnections());
+						Node bn = nodes.get(a).getConnection(b);
+						
+						nodes.get(a).removeConnection(bn);
+						bn.removeConnection(nodes.get(a));
+					}
+				}
+			}
+			if ((int) (Math.random() * 5000) == 0) {
+				if (nodes.size() > 1) {
+					removeNode((int) (Math.random() * nodes.size()));
+				}
+			}
+			
+			
+			
 			if (simulating) {
 				for (int n = 0; n < nodes.size(); n++) {
 					if (nodes.get(n) != null) {
@@ -67,6 +102,13 @@ public class DGVPanel extends JPanel
 			}
 			repaint(0);
 		}
+	}
+	
+	public void removeNode(int n) {
+		for (int i = 0; i < nodes.size(); i++) {
+			nodes.get(i).removeConnection(nodes.get(n));
+		}
+		nodes.remove(n);
 	}
 
 	@Override
@@ -131,10 +173,7 @@ public class DGVPanel extends JPanel
 					break;
 				} else if (e.getButton() == MouseEvent.BUTTON3) {
 					nodeClicked = true;
-					for (int i = 0; i < nodes.size(); i++) {
-						nodes.get(i).removeConnection(nodes.get(n));
-					}
-					nodes.remove(n);
+					removeNode(n);
 				}
 			}
 		}
